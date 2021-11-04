@@ -75,7 +75,7 @@
     </include>
 
     <include>
-      <uri>model://walls/course1_walls_invisible</uri>
+      <uri>model://walls_invisible</uri>
     </include>
 
 
