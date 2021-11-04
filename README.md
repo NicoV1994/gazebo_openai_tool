@@ -75,8 +75,11 @@ cd ~/catkin_ws/src
 sudo apt-get install python3-pip -y
 
 pip3 install --ignore-installed tensorflow gym wandb
+```
+Download GIT Repository
+```bash
 
-git clone --depth 1 --branch version2 https://bitbucket.org/theconstructcore/openai_ros.git 
+git clone https://github.com/NicoV1994/gazebo_openai_tool.git
 
 cd ~/catkin_ws
 
