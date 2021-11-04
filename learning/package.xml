@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>learning</name>
+  <version>0.0.0</version>
+  <description>The learning package</description>
+  <maintainer email="nico.vergeiner@students.uibk.ac.at">Nico Vergeiner</maintainer>
+  
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>rospy</depend>
+  <depend>openai_ros</depend>
+  <depend>maps</depend>
+  <depend>spawn_robots</depend>
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend> 
+  <depend>sensor_msg</depend> 
+  <depend>geometry_msgs</depend> 
+  <depend>nav_msgs</depend> 
+  <depend>tf</depend> 
+  <depend>gazebo_ros</depend>
+  <exec_depend>gazebo</exec_depend> 
+  
+  <export>
+  	<gazebo_ros gazebo_media_path="${prefix}"/>
+  </export>
+</package>

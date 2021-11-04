@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>spawn_robots</name>
+  <version>0.0.0</version>
+  <description>The spawn_robot package</description>
+  <maintainer email="nico.vergeiner@students.uibk.ac.at">Nico Vergeiner</maintainer>
+  
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>rospy</depend>
+  <depend>gazebo_ros</depend>
+  <exec_depend>gazebo</exec_depend> 
+  
+  <export>
+  	<gazebo_ros gazebo_media_path="${prefix}"/>
+  </export>
+</package>
