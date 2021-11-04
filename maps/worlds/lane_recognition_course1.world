@@ -71,7 +71,7 @@
     </include>
 
     <include>
-      <uri>model://course</uri>
+      <uri>model://lane_recognition_course1/course</uri>
     </include>
 
     <include>
