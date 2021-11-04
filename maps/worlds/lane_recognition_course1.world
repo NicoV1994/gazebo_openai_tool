@@ -75,7 +75,7 @@
     </include>
 
     <include>
-      <uri>model://walls_invisible</uri>
+      <uri>model://lane_recognition_course1/walls_invisible</uri>
     </include>
 
 
