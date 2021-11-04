@@ -76,8 +76,7 @@ sudo apt-get install python3-pip -y
 
 pip3 install --ignore-installed tensorflow gym wandb
 ```
-
-Create catkin workspace (source: http://wiki.ros.org/catkin/Tutorials/create_a_workspace)
+Download GIT Repository
 ```bash
 
 git clone https://github.com/NicoV1994/gazebo_openai_tool.git
