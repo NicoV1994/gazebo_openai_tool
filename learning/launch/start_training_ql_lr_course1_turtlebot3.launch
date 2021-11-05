@@ -3,5 +3,5 @@
     <!-- This version uses the openai_ros environments -->
     <rosparam command="load" file="$(find learning)/config/turtlebot3_course1_lr_ql_params.yaml" />
     <!-- Launch the training system -->
-    <node pkg="learning" name="turtlebot3_lane_recognition_course1" type="start_training_course1.py" output="screen"/>
+    <node pkg="learning" name="turtlebot3_lane_recognition_course1" type="start_training_ql_lr_course1_turtlebot3.py" output="screen"/>
 </launch>

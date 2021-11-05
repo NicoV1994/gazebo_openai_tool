@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
     # Set the logging system
     rospack = rospkg.RosPack()
-    pkg_path = rospack.get_path('test1')
+    pkg_path = rospack.get_path('learning')
     outdir = pkg_path + '/training_results'
     env = wrappers.Monitor(env, outdir, force=True)
     rospy.loginfo("Monitor Wrapper started")
