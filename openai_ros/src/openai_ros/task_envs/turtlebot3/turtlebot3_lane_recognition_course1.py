@@ -22,14 +22,14 @@ class TurtleBot3WorldEnv(turtlebot3camera_env.TurtleBot3Env):
                                                " DOESNT exist, execute: mkdir -p " + ros_ws_abspath + \
                                                "/src;cd " + ros_ws_abspath + ";catkin_make"
 
-        ROSLauncher(rospackage_name="test1",
-                    launch_file_name="course1_world.launch",
+        ROSLauncher(rospackage_name="maps",
+                    launch_file_name="lane_recognition_course1.launch",
                     ros_ws_abspath=ros_ws_abspath)
 
         # Load Params from the desired Yaml file
-        LoadYamlFileParamsTest(rospackage_name="test1",
-                               rel_path_from_package_to_file="config",
-                               yaml_file_name="turtlebot3_course1_params.yaml")
+        LoadYamlFileParamsTest(rospackage_name="openai_ros",
+                               rel_path_from_package_to_file="src/openai_ros/task_envs/turtlebot3/config",
+                               yaml_file_name="turtlebot3_lane_regonition_course1.yaml")
 
 
         # Here we will add any init functions prior to starting the MyRobotEnv
