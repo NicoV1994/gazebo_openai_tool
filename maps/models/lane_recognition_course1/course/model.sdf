@@ -29,8 +29,8 @@
         </geometry>
 	      <material>
           <script>
-            <uri>model://course/materials/scripts</uri>
-            <uri>model://course/materials/textures</uri>
+            <uri>model://lane_recognition_course1/course/materials/scripts</uri>
+            <uri>model://lane_recognition_course1/course/materials/textures</uri>
             <name>course</name>
           </script>
         </material>
