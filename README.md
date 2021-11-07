@@ -85,3 +85,28 @@ cd ~/catkin_ws
 
 catkin_make
 ```
+
+Intall more catkin packages
+```bash
+
+sudo apt-get install ros-noetic-joy ros-noetic-teleop-twist-joy \
+  ros-noetic-teleop-twist-keyboard ros-noetic-laser-proc \
+  ros-noetic-rgbd-launch ros-noetic-rosserial-arduino \
+  ros-noetic-rosserial-python ros-noetic-rosserial-client \
+  ros-noetic-rosserial-msgs ros-noetic-amcl ros-noetic-map-server \
+  ros-noetic-move-base ros-noetic-urdf ros-noetic-xacro \
+  ros-noetic-compressed-image-transport ros-noetic-rqt* ros-noetic-rviz \
+  ros-noetic-gmapping ros-noetic-navigation ros-noetic-interactive-markers \ ros-noetic-cv-bridge ros-noetic-vision-opencv python3-opencv \ libopencv-dev ros-noetic-image-proc -y
+
+rosdep install --from-paths ~/catkin_ws --ignore-src --rosdistro=noetic
+```
+
+Change permission for python scripts
+```bash
+chmod +x ~/catkin_ws/src/gazebo_openai_tool/learning/scripts/.
+```
+
+Add alias killgazebogym
+```bash
+echo "alias killgazebogym='killall -9 rosout roslaunch rosmaster gzserver nodelet robot_state_publisher gzclient'" >> ~/.bashrc
+```
