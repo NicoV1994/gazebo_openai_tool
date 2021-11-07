@@ -42,20 +42,6 @@ class TurtleBot3WorldEnv(turtlebot3camera_env.TurtleBot3Env):
         # We set the reward range, which is not compulsory but here we do it.
         self.reward_range = (-numpy.inf, numpy.inf)
 
-
-        #number_observations = rospy.get_param('/turtlebot3/n_observations')
-        """
-        We set the Observation space for the 6 observations
-        cube_observations = [
-            round(current_disk_roll_vel, 0),
-            round(y_distance, 1),
-            round(roll, 1),
-            round(pitch, 1),
-            round(y_linear_speed,1),
-            round(yaw, 1),
-        ]
-        """
-
         # Actions and Observations
         self.linear_forward_speed = rospy.get_param('/turtlebot3/linear_forward_speed')
         self.linear_turn_speed = rospy.get_param('/turtlebot3/linear_turn_speed')
@@ -63,23 +49,11 @@ class TurtleBot3WorldEnv(turtlebot3camera_env.TurtleBot3Env):
         self.init_linear_forward_speed = rospy.get_param('/turtlebot3/init_linear_forward_speed')
         self.init_linear_turn_speed = rospy.get_param('/turtlebot3/init_linear_turn_speed')
 
-        #self.new_ranges = rospy.get_param('/turtlebot3/new_ranges')
-        #self.min_range = rospy.get_param('/turtlebot3/min_range')
-        #self.max_laser_value = rospy.get_param('/turtlebot3/max_laser_value')
-        #self.min_laser_value = rospy.get_param('/turtlebot3/min_laser_value')
-        self.max_linear_aceleration = rospy.get_param('/turtlebot3/max_linear_aceleration')
-
-
         # We create two arrays based on the binary values that will be assigned
         # In the discretization method.
         camera_image = self.get_camera_image()
-        #num_laser_readings = int(len(laser_scan.ranges)/self.new_ranges)
-        #high = numpy.full((num_laser_readings), self.max_laser_value)
-        #low = numpy.full((num_laser_readings), self.min_laser_value)
 
         # We only use two integers
-        #self.observation_space = spaces.Box(low, high)
-
         rospy.logdebug("ACTION SPACES TYPE===>"+str(self.action_space))
         rospy.logdebug("OBSERVATION SPACES TYPE===>"+str(self.observation_space))
 
@@ -145,7 +119,7 @@ class TurtleBot3WorldEnv(turtlebot3camera_env.TurtleBot3Env):
         """
         Here we define what sensor data defines our robots observations
         To know which Variables we have acces to, we need to read the
-        TurtleBot2Env API DOCS
+        TurtleBot3Env
         :return:
         """
         rospy.logdebug("Start Get Observation ==>")
@@ -162,19 +136,14 @@ class TurtleBot3WorldEnv(turtlebot3camera_env.TurtleBot3Env):
 
     def _is_done(self, observations):
 
-        if self._episode_done:
-            rospy.logerr("TurtleBot3 is Too Close to wall==>")
-        else:
-            rospy.logwarn("TurtleBot3 is NOT close to a wall ==>")
-
         # Now we check if it has crashed based on the contact state
         contacts_state_data = self.get_contacts_state()
         
         if (contacts_state_data.states != []):
-            rospy.logerr("TurtleBot3 Crashed")
+            rospy.logerr("TurtleBot3 Failed")
             self._episode_done = True
         else:
-            rospy.logerr("DIDNT crash TurtleBot3")
+            rospy.logerr("TurtleBot3 DIDNT Fail")
 
 
         return self._episode_done
@@ -211,17 +180,3 @@ class TurtleBot3WorldEnv(turtlebot3camera_env.TurtleBot3Env):
         discretized_image = data.data
 
         return discretized_image
-
-
-    def get_vector_magnitude(self, vector):
-        """
-        It calculated the magnitude of the Vector3 given.
-        This is usefull for reading imu accelerations and knowing if there has been
-        a crash
-        :return:
-        """
-        contact_force_np = numpy.array((vector.x, vector.y, vector.z))
-        force_magnitude = numpy.linalg.norm(contact_force_np)
-
-        return force_magnitude
-

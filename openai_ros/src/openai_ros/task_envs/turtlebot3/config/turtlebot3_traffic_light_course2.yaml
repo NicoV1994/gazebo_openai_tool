@@ -1,0 +1,12 @@
+turtlebot3: #namespace
+    
+    n_actions: 2 # We have 2 action: Forwards, Stops
+
+    speed_step: 1.0 # Time to wait in the reset phases
+
+    linear_forward_speed: 0.5 # Spwwed for ging fowards
+    init_linear_forward_speed: 0.0 # Initial linear speed in which we start each episode
+
+    forwards_reward: 5 # Points Given to go forwards
+    stop_reward: 0 # Points Given to doing nothing
+    end_episode_points: 200 # Points given when ending an episode

@@ -4,7 +4,7 @@ import time
 from openai_ros import robot_gazebo_env
 from std_msgs.msg import Float64
 from sensor_msgs.msg import JointState
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import CompressedImage
 from sensor_msgs.msg import LaserScan
 from sensor_msgs.msg import PointCloud2
 from sensor_msgs.msg import Imu
@@ -38,7 +38,7 @@ class TurtleBot3Env(robot_gazebo_env.RobotGazeboEnv):
         Sensor Topic List:
         * /odom : Odometry readings of the Base of the Robot
         * /imu: Inertial Mesuring Unit that gives relative accelerations and orientations.
-        * /camera/image: Camera image
+        * /camera/image/compressed : Camera image
         * /robot_bumper: Contacts sensor
 
         Actuators Topic List: /cmd_vel,
@@ -77,7 +77,7 @@ class TurtleBot3Env(robot_gazebo_env.RobotGazeboEnv):
         # We Start all the ROS related Subscribers and publishers
         rospy.Subscriber("/odom", Odometry, self._odom_callback)
         rospy.Subscriber("/imu", Imu, self._imu_callback)
-        rospy.Subscriber("/camera/image", Image, self._camera_image_callback)
+        rospy.Subscriber("/camera/image/compressed", CompressedImage, self._camera_image_callback)
         rospy.Subscriber("/robot_bumper", ContactsState, self._contacts_state_callback)
 
         self._cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
@@ -142,14 +142,14 @@ class TurtleBot3Env(robot_gazebo_env.RobotGazeboEnv):
 
     def _check_camera_image_ready(self):
         self.camera_image = None
-        rospy.logdebug("Waiting for /camera/image to be READY...")
+        rospy.logdebug("Waiting for /camera/image/compressed to be READY...")
         while self.camera_image is None and not rospy.is_shutdown():
             try:
-                self.camera_image = rospy.wait_for_message("/camera/image", Image, timeout=1.0)
-                rospy.logdebug("Current /camera/image READY=>")
+                self.camera_image = rospy.wait_for_message("/camera/image/compressed", CompressedImage, timeout=1.0)
+                rospy.logdebug("Current /camera/image/compressed READY=>")
 
             except:
-                rospy.logerr("Current /camera/image not ready yet, retrying for getting camera_image")
+                rospy.logerr("Current /camera/image/compressed not ready yet, retrying for getting camera_image")
         return self.camera_image
 
     def _check_contacts_state_ready(self):
