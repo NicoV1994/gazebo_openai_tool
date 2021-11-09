@@ -1,7 +1,7 @@
 # gazebo_openai_tool
 This work builds on the openai_ros package (http://wiki.ros.org/openai_ros).
 -----
-**`gazebo_openai_tool` is a structure of packages which works with Gazebo simulator (http://gazebosim.org/) and OpenaAI Gym (https://gym.openai.com/). It puts together simulation tools, robot middlewares, machine learning and reinforcement learning to create an environment which is easy to set up and to expand. The goal is to give people who are new to robotics and machine learning an out of the box application to test there learning algorithms.**
+**`gazebo_openai_tool` is a structure of packages which works with [Gazebo simulator](http://gazebosim.org/) and [OpenaAI Gym](https://gym.openai.com/). It puts together simulation tools, robot middlewares, machine learning and reinforcement learning to create an environment which is easy to set up and to expand. The goal is to give people who are new to robotics and machine learning an out of the box application to test there learning algorithms.**
 
 **Code is available "as it is" and currently it's not supported by any specific organization.**
 -----
@@ -11,7 +11,41 @@ This work builds on the openai_ros package (http://wiki.ros.org/openai_ros).
 - [Usage](#usage)
 
 ## Environments
+The environment is structured into four parts: openai_ros learning, maps and robot_models.
 
+### openai_ros
+`openai_ros` is then core of `gazebo_openai_tool`.
+It is a package structure provided and maintained by [TheConstruct](https://www.theconstructsim.com/). It makes it easy to use OpenAI with ROS and Gazebo.
+The structure of openai_ros can be divided in 3 parts: Gazebo Environment, Robot Environment and Task Environment.
+
+Gazebo Environment inherits from the Gym Environment from OpenAI and is mainly used to connect the simulated environment to the Gazebo simulator.
+
+Robot Environment inherits from the Gazebo Environment and uses the `robot_models` package to load and spawn robots into the gazebo world. A new robot enviroment is needet for every new robot that is implemented
+
+Task Environment inherits from the Robot Environment und uses the `maps` package to load the world in which the robot should navigate and learn. It also defines what the task that the robot should fulfill. Task environments are made for specific robot environments. A new task environment is needet for every new robot and every new task.
+
+For more detailed information see [Website](http://wiki.ros.org/openai_ros) , [Source](https://bitbucket.org/theconstructcore/openai_ros.git) , [API documentation](https://theconstructcore.bitbucket.io/openai_ros/index.html)
+
+### learning
+`learninig` is the only package which users should need to interact with, given that tasks and robots are implemented completely.
+Here you select the task and robot to be used and set up the learning algorithm that you want to use in order to make your agent learn.
+
+The training scripts are totally independent from the environments. So you can change the training script without modifying your environments structure.
+
+### maps
+'maps' package is used to store all assets which are needed for the `task environments` of `openai_ros`. This includes course design, obstacles and traffic lights.
+It is structured in a way that the `task environment` only has to use one launch file to load the whole map and all assets in it.
+
+Implemented maps are:
+TODO
+
+### robot_models
+`robot_models` is used to store all robot related packages like robot descriptions and sensors.
+It is structured in a way that the `robot environment` of `openai_ros` only has to use one launch file to load a robot and all its sensors and dependencies.
+
+Implemented robots are:
+Turtlebot3
+Duckiebot
 
 ## Setup
 ### Installation
@@ -121,5 +155,7 @@ echo "alias killgazebogym='killall -9 rosout roslaunch rosmaster gzserver nodele
 ```
 
 ### Docker
+TODO
 
 ## Usage
+TODO
