@@ -27,7 +27,7 @@ Robot Environment inherits from the Gazebo Environment and uses the `robot_model
 
 Task Environment inherits from the Robot Environment und uses the `maps` package to load the world in which the robot should navigate and learn. It also defines what the task that the robot should fulfill. Task environments are made for specific robot environments. A new task environment is needet for every new robot and every new task.
 
-For more detailed information see [Website](http://wiki.ros.org/openai_ros) , [Source](https://bitbucket.org/theconstructcore/openai_ros.git) , [API documentation](https://theconstructcore.bitbucket.io/openai_ros/index.html)
+For more detailed information see [Website](http://wiki.ros.org/openai_ros), [Source](https://bitbucket.org/theconstructcore/openai_ros.git), [API documentation](https://theconstructcore.bitbucket.io/openai_ros/index.html)
 
 ### learning
 `learninig` is the only package which users should need to interact with, given that tasks and robots are implemented completely.
