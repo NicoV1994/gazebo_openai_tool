@@ -33,7 +33,7 @@ Here you select the task and robot to be used and set up the learning algorithm 
 The training scripts are totally independent from the environments. So you can change the training script without modifying your environments structure.
 
 ### maps
-'maps' package is used to store all assets which are needed for the `task environments` of `openai_ros`. This includes course design, obstacles and traffic lights.
+`maps` package is used to store all assets which are needed for the `task environments` of `openai_ros`. This includes course design, obstacles and traffic lights.
 It is structured in a way that the `task environment` only has to use one launch file to load the whole map and all assets in it.
 
 Implemented maps are:
