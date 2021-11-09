@@ -1,9 +1,12 @@
 # gazebo_openai_tool
 This work builds on the [openai_ros package](http://wiki.ros.org/openai_ros).
+
 -----
+
 **`gazebo_openai_tool` is a structure of packages which works with [Gazebo simulator](http://gazebosim.org/) and [OpenaAI Gym](https://gym.openai.com/). It puts together simulation tools, robot middlewares, machine learning and reinforcement learning to create an environment which is easy to set up and to expand. The goal is to give people who are new to robotics and machine learning an out of the box application to test there learning algorithms.**
 
 **Code is available "as it is" and is not supported by any specific organization.**
+
 -----
 ## Table of Contents
 - [Environments](#environments)
