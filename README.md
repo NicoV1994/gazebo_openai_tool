@@ -142,7 +142,9 @@ sudo apt-get install ros-noetic-joy ros-noetic-teleop-twist-joy \
   ros-noetic-rosserial-msgs ros-noetic-amcl ros-noetic-map-server \
   ros-noetic-move-base ros-noetic-urdf ros-noetic-xacro \
   ros-noetic-compressed-image-transport ros-noetic-rqt* ros-noetic-rviz \
-  ros-noetic-gmapping ros-noetic-navigation ros-noetic-interactive-markers \ ros-noetic-cv-bridge ros-noetic-vision-opencv python3-opencv \ libopencv-dev ros-noetic-image-proc -y
+  ros-noetic-gmapping ros-noetic-navigation ros-noetic-interactive-markers \ 
+  ros-noetic-cv-bridge ros-noetic-vision-opencv python3-opencv \ 
+  libopencv-dev ros-noetic-image-proc -y
 
 rosdep install --from-paths ~/catkin_ws --ignore-src --rosdistro=noetic
 ```
