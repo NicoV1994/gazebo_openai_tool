@@ -21,13 +21,13 @@ The environment is structured into four parts: openai_ros, learning, maps and ro
 ### openai_ros
 `openai_ros` is then core of `gazebo_openai_tool`.
 It is a package structure provided and maintained by [TheConstruct](https://www.theconstructsim.com/). It makes it easy to use OpenAI with ROS and Gazebo.
-The structure of openai_ros can be divided in 3 parts: Gazebo Environment, Robot Environment and Task Environment.
+The structure of openai_ros can be divided in 3 parts: GazeboEnvironment, RobotEnvironment and TaskEnvironment.
 
-Gazebo Environment inherits from the Gym Environment from OpenAI and is mainly used to connect the simulated environment to the Gazebo simulator.
+GazeboEnvironment inherits from the Gym Environment from OpenAI and is mainly used to connect the simulated environment to the Gazebo simulator.
 
-Robot Environment inherits from the Gazebo Environment and uses the `robot_models` package to load and spawn robots into the gazebo world. A new robot enviroment is needet for every new robot that is implemented
+RobotEnvironment inherits from the GazeboEnvironment and uses the `robot_models` package to load and spawn robots into the gazebo world. A new robot enviroment is needet for every new robot that is implemented
 
-Task Environment inherits from the Robot Environment und uses the `maps` package to load the world in which the robot should navigate and learn. It also defines what the task that the robot should fulfill. Task environments are made for specific robot environments. A new task environment is needet for every new robot and every new task.
+TaskEnvironment inherits from the RobotEnvironment und uses the `maps` package to load the world in which the robot should navigate and learn. It also defines what the task that the robot should fulfill. Task environments are made for specific robot environments. A new task environment is needet for every new robot and every new task.
 
 For more detailed information see [Website](http://wiki.ros.org/openai_ros), [Source](https://bitbucket.org/theconstructcore/openai_ros.git), [API documentation](https://theconstructcore.bitbucket.io/openai_ros/index.html)
 
