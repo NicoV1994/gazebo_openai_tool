@@ -15,6 +15,7 @@ This work builds on the [openai_ros package](http://wiki.ros.org/openai_ros).
 
 ## Environments
 The environment is structured into four parts: openai_ros, learning, maps and robot_models.
+[structure](imgs/strucure.png)
 
 ### openai_ros
 `openai_ros` is then core of `gazebo_openai_tool`.
