@@ -16,7 +16,7 @@ This work builds on the [openai_ros package](http://wiki.ros.org/openai_ros).
 ## Environments
 The environment is structured into four parts: openai_ros, learning, maps and robot_models.
 
-![structure](imgs/toolStructure.png)
+![structure](imgs/structure.png)
 
 ### openai_ros
 `openai_ros` is then core of `gazebo_openai_tool`.
@@ -49,8 +49,7 @@ TODO
 It is structured in a way that the `robot environment` of `openai_ros` only has to use one launch file to load a robot and all its sensors and dependencies.
 
 Implemented robots are:
-Turtlebot3,
-Duckiebot
+Turtlebot3
 
 ## Setup
 ### Installation
