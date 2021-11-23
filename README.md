@@ -58,95 +58,117 @@ Ubuntu 20.04
 Update Ubuntu and install curl
 ```bash
 sudo apt-get update
-
+```
+```bash
 sudo apt-get upgrade -y
-
+```
+```bash
 sudo apt update
-
+```
+```bash
 sudo apt upgrade -y
 ```
 
 Install ROS Noetic (source: http://wiki.ros.org/noetic/Installation/Ubuntu)
 ```bash
 sudo apt-get install curl
-
+```
+```bash
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-
+```
+```bash
 curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
-
+```
+```bash
 sudo apt-get update
-
+```
+```bash
 sudo apt-get upgrade -y
-
+```
+```bash
 sudo apt update
-
+```
+```bash
 sudo apt upgrade -y
-
+```
+```bash
 sudo apt-get install ros-noetic-desktop-full -y
-
+```
+```bash
 source /opt/ros/noetic/setup.bash
-
+```
+```bash
 echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
-
+```
+```bash
 source ~/.bashrc
-
+```
+```bash
 sudo apt install python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential -y
-
+```
+```bash
 sudo apt install python3-rosdep -y
-
+```
+```bash
 sudo rosdep init
-
+```
+```bash
+rosdep update
+```
+```bash
 rosdep update --include-eol-distros
-
+```
+```bash
 sudo apt-get install ros-noetic-gazebo-ros-pkgs ros-noetic-gazebo-ros-control -y
 ```
 
 Create catkin workspace (source: http://wiki.ros.org/catkin/Tutorials/create_a_workspace)
 ```bash
 mkdir -p ~/catkin_ws/src
-
+```
+```bash
 cd ~/catkin_ws/src
-
+```
+```bash
 catkin_init_workspace
-
+```
+```bash
 cd ~/catkin_ws
-
+```
+```bash
 catkin_make
-
+```
+```bash
 source ~/catkin_ws/devel/setup.bash
-
+```
+```bash
 echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
-
+```
+```bash
 cd ~/catkin_ws/src
-
+```
+```bash
 sudo apt-get install python3-pip -y
-
+```
+```bash
 pip3 install --ignore-installed tensorflow gym wandb
 ```
 Download GIT Repository
 ```bash
-
 git clone https://github.com/NicoV1994/gazebo_openai_tool.git
-
+```
+```bash
 cd ~/catkin_ws
-
+```
+```bash
 catkin_make
 ```
 
 Intall more catkin packages
 ```bash
-
-sudo apt-get install ros-noetic-joy ros-noetic-teleop-twist-joy \
-  ros-noetic-teleop-twist-keyboard ros-noetic-laser-proc \
-  ros-noetic-rgbd-launch ros-noetic-rosserial-arduino \
-  ros-noetic-rosserial-python ros-noetic-rosserial-client \
-  ros-noetic-rosserial-msgs ros-noetic-amcl ros-noetic-map-server \
-  ros-noetic-move-base ros-noetic-urdf ros-noetic-xacro \
-  ros-noetic-compressed-image-transport ros-noetic-rqt* ros-noetic-rviz \
-  ros-noetic-gmapping ros-noetic-navigation ros-noetic-interactive-markers \ 
-  ros-noetic-cv-bridge ros-noetic-vision-opencv python3-opencv \ 
-  libopencv-dev ros-noetic-image-proc -y
-
+sudo apt-get install ros-noetic-joy ros-noetic-teleop-twist-joy ros-noetic-teleop-twist-keyboard ros-noetic-laser-proc ros-noetic-rgbd-launch ros-noetic-rosserial-arduino ros-noetic-rosserial-python ros-noetic-rosserial-client ros-noetic-rosserial-msgs ros-noetic-amcl ros-noetic-map-server ros-noetic-move-base ros-noetic-urdf ros-noetic-xacro ros-noetic-compressed-image-transport ros-noetic-rqt* ros-noetic-rviz ros-noetic-gmapping ros-noetic-navigation ros-noetic-interactive-markers ros-noetic-cv-bridge ros-noetic-vision-opencv python3-opencv libopencv-dev ros-noetic-image-proc -y
+```
+```bash
 rosdep install --from-paths ~/catkin_ws --ignore-src --rosdistro=noetic
 ```
 
@@ -164,4 +186,9 @@ echo "alias killgazebogym='killall -9 rosout roslaunch rosmaster gzserver nodele
 TODO
 
 ## Usage
+To use the Tool you have to run the start_training launch file from the learning folder.
+```bash
+roslaunch learning start_training_wl_lr_course1_turtlebot3.launch
+```
+
 TODO
