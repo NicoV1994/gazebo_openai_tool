@@ -1,7 +1,7 @@
 import rospy
 import numpy
 from gym import spaces
-from openai_ros.robot_envs import turtlebot3camera_env
+from openai_ros.robot_envs import turtlebot3traffic_env
 from gym.envs.registration import register
 from geometry_msgs.msg import Vector3
 from openai_ros.task_envs.task_commons import LoadYamlFileParamsTest
@@ -9,10 +9,10 @@ from openai_ros.openai_ros_common import ROSLauncher
 import os
 
 
-class TurtleBot3WorldEnv(turtlebot3camera_env.TurtleBot3Env):
+class TurtleBot3WorldEnv(turtlebot3traffic_env.TurtleBot3Env):
     def __init__(self):
         """
-        This Task Env is designed for having the TurtleBot3 in the turtlebot3 world course1.
+        This Task Env is designed for having the TurtleBot3 in the turtlebot3 world course2.
         It will learn how to move around without crashing.
         """
         # This is the path where the simulation files, the Task and the Robot gits will be downloaded if not there

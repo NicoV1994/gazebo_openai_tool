@@ -29,8 +29,8 @@
         </geometry>
 	      <material>
           <script>
-            <uri>model://trafic_light_course2/course/materials/scripts</uri>
-            <uri>model://trafic_light_course2/course/materials/textures</uri>
+            <uri>model://traffic_light_course2/course/materials/scripts</uri>
+            <uri>model://traffic_light_course2/course/materials/textures</uri>
             <name>course</name>
           </script>
         </material>

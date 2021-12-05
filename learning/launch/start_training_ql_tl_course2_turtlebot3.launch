@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <!-- This version uses the openai_ros environments -->
+    <rosparam command="load" file="$(find learning)/config/turtlebot3_course2_tl_ql_params.yaml" />
+    <!-- Launch the training system -->
+    <node pkg="learning" name="turtlebot3_traffic_light_course2" type="start_training_ql_tl_course2_turtlebot3.py" output="screen"/>
+</launch>

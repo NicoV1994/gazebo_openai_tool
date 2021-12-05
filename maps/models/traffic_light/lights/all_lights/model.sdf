@@ -1,0 +1,177 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+
+  <model name="all_lights">
+    <static>true</static>
+
+    <link name='Yellow_light_source'>
+      <pose>-0.23 0 0.504 1.57 0 0</pose>
+      
+      <light name='yellow' type='spot'>
+        <pose>0 0 0.0 1.57 0 0</pose>
+        <attenuation>
+          <range>30</range>
+          <linear>0.05</linear>
+        </attenuation>
+        <diffuse>0.5 1 1 1</diffuse>
+        <specular>1 1 1 1</specular>
+        <spot>
+          <inner_angle>0.3</inner_angle>
+          <outer_angle>0.35</outer_angle>
+          <falloff>1</falloff>
+        </spot>
+        <direction>0 0 -1</direction>
+      </light>
+      
+      <visual name='yellow'>
+        <geometry>
+          <cylinder>
+            <radius>0.05</radius>
+            <length>0.02</length>
+          </cylinder>
+          <sphere>
+            <radius>0.08</radius>
+          </sphere>
+        </geometry>
+        <transparency>0.6</transparency>
+      
+        <material>
+          <ambient>1 1 0 1</ambient>
+          <diffuse>1 1 0 1</diffuse>
+          <specular>1 1 1 1</specular>
+          <emissive>1 1 0 1 </emissive>
+        </material>
+      
+      </visual>
+    </link>
+
+    <link name='Red_light_source'>
+      <pose>-0.332 0 0.504 1.57 0 0</pose>
+
+      <light name='red' type='spot'>
+        <pose>0 0 0.0 1.57 0 0</pose>
+        <attenuation>
+          <range>30</range>
+          <linear>0.05</linear>
+        </attenuation>
+        <diffuse>0.5 1 1 1</diffuse>
+        <specular>1 1 1 1</specular>
+        <spot>
+          <inner_angle>0.3</inner_angle>
+          <outer_angle>0.35</outer_angle>
+          <falloff>1</falloff>
+        </spot>
+        <direction>0 0 -1</direction>
+      </light>
+
+      <visual name='red'>
+        <geometry>
+          <cylinder>
+            <radius>0.05</radius>
+            <length>0.02</length>
+          </cylinder>
+          <sphere>
+            <radius>0.08</radius>
+          </sphere>
+        </geometry>
+        <transparency>0.6</transparency>
+      
+        <material>
+          <ambient> 1 0 0 1</ambient>
+          <diffuse> 1 0 0 1</diffuse>
+          <specular>1 1 1 1</specular>
+          <emissive>1 0 0 1</emissive>
+        </material>
+
+      </visual>
+    </link>
+
+    <link name='Green_light_source'>
+      
+      <pose>-0.124 0 0.504 1.57 0 0</pose>
+      
+      <light name='green' type='spot'>
+        <pose>0 0 0.0 1.57 0 0</pose>
+        <attenuation>
+          <range>30</range>
+          <linear>0.05</linear>
+        </attenuation>
+        <diffuse>0.5 1 1 1</diffuse>
+        <specular>1 1 1 1</specular>
+        <spot>
+          <inner_angle>0.3</inner_angle>
+          <outer_angle>0.35</outer_angle>
+          <falloff>1</falloff>
+        </spot>
+        <direction>0 0 -1</direction>
+      </light>
+      
+      <visual name='green'>
+        <geometry>
+          <cylinder>
+            <radius>0.05</radius>
+            <length>0.02</length>
+          </cylinder>
+          <sphere>
+            <radius>0.08</radius>
+          </sphere>
+        </geometry>
+        <transparency>0.6</transparency>
+        <material>
+          <ambient>0 1 0 1</ambient>
+          <diffuse>0 1 0 1</diffuse>
+          <specular>1 1 1 1</specular>
+          <emissive>0 1 0 1</emissive>
+        </material>
+      </visual>
+    </link>
+
+    <plugin name='lights_controller' filename='libLedPlugin.so'>
+      <enable>true</enable>
+      
+      <light>
+        <id>Yellow_light_source/yellow</id>
+        <block>
+          <duration>1</duration>
+          <interval>5</interval>
+        </block>
+        <block>
+          <duration>4</duration>
+          <interval>4</interval>
+        </block>
+        <block>
+          <duration>0</duration>
+          <interval>4</interval>
+        </block>
+        <enable>true</enable>
+      </light>
+
+      <light>
+        <id>Red_light_source/red</id>
+        <block>
+          <duration>2</duration>
+          <interval>5</interval>
+        </block>
+        <enable>true</enable>
+      </light>
+
+      <light>
+        <id>Green_light_source/green</id>
+        <block>
+          <duration>1</duration>
+          <interval>5</interval>
+        </block>
+        <block>
+          <duration>4</duration>
+          <interval>4</interval>
+        </block>
+        <block>
+          <duration>0</duration>
+          <interval>4</interval>
+        </block>
+        <enable>true</enable>
+      </light>
+      
+    </plugin>
+  </model>
+</sdf>
