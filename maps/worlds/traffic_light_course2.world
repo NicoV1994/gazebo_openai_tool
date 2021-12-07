@@ -74,6 +74,10 @@
       <uri>model://traffic_light_course2/course</uri>
     </include>
 
+    <include>
+      <uri>model://traffic_light_course2/walls_invisible</uri>
+    </include>
+
     <actor name="moving_wall">
         <link name="link">
           <visual name="visual">

@@ -1,18 +1,17 @@
 import rospy
 import numpy
 from gym import spaces
-from openai_ros.robot_envs import turtlebot3traffic_env
+from openai_ros.robot_envs import turtlebot3camera_env
 from gym.envs.registration import register
 from geometry_msgs.msg import Vector3
 from openai_ros.task_envs.task_commons import LoadYamlFileParamsTest
 from openai_ros.openai_ros_common import ROSLauncher
 import os
 
-
-class TurtleBot3WorldEnv(turtlebot3traffic_env.TurtleBot3Env):
+class TurtleBot3WorldEnv(turtlebot3camera_env.TurtleBot3Env):
     def __init__(self):
         """
-        This Task Env is designed for having the TurtleBot3 in the turtlebot3 world course2.
+        This Task Env is designed for having the TurtleBot3 in the turtlebot3 world course1.
         It will learn how to move around without crashing.
         """
         # This is the path where the simulation files, the Task and the Robot gits will be downloaded if not there
@@ -21,6 +20,9 @@ class TurtleBot3WorldEnv(turtlebot3traffic_env.TurtleBot3Env):
         assert os.path.exists(ros_ws_abspath), "The Simulation ROS Workspace path " + ros_ws_abspath + \
                                                " DOESNT exist, execute: mkdir -p " + ros_ws_abspath + \
                                                "/src;cd " + ros_ws_abspath + ";catkin_make"
+
+        robot_launch_file = 'spawn_turtlebot3_traffic_light.launch'#rospy.get_param("/turtlebot3/robot_launch_file", None)
+
 
         ROSLauncher(rospackage_name="maps",
                     launch_file_name="traffic_light_course2.launch",
@@ -33,7 +35,7 @@ class TurtleBot3WorldEnv(turtlebot3traffic_env.TurtleBot3Env):
 
 
         # Here we will add any init functions prior to starting the MyRobotEnv
-        super(TurtleBot3WorldEnv, self).__init__(ros_ws_abspath)
+        super(TurtleBot3WorldEnv, self).__init__(ros_ws_abspath,robot_launch_file)
 
         # Only variable needed to be set here
         number_actions = rospy.get_param('/turtlebot3/n_actions')
@@ -44,17 +46,24 @@ class TurtleBot3WorldEnv(turtlebot3traffic_env.TurtleBot3Env):
 
         # Actions and Observations
         self.linear_forward_speed = rospy.get_param('/turtlebot3/linear_forward_speed')
+        self.linear_turn_speed = rospy.get_param('/turtlebot3/linear_turn_speed')
+        self.angular_speed = rospy.get_param('/turtlebot3/angular_speed')
         self.init_linear_forward_speed = rospy.get_param('/turtlebot3/init_linear_forward_speed')
+        self.init_linear_turn_speed = rospy.get_param('/turtlebot3/init_linear_turn_speed')
 
         # We create two arrays based on the binary values that will be assigned
         # In the discretization method.
         camera_image = self.get_camera_image()
+        odom = self.get_odom()
 
+        # We only use two integers
         rospy.logdebug("ACTION SPACES TYPE===>"+str(self.action_space))
+        rospy.logdebug("OBSERVATION SPACES TYPE===>"+str(self.observation_space))
 
         # Rewards
         self.forwards_reward = rospy.get_param("/turtlebot3/forwards_reward")
-        self.stop_reward = rospy.get_param("/turtlebot3/stop_reward")
+        self.stops_reward = rospy.get_param("/turtlebot3/stops_reward")
+        self.turn_reward = rospy.get_param("/turtlebot3/turn_reward")
         self.end_episode_points = rospy.get_param("/turtlebot3/end_episode_points")
 
         self.cumulated_steps = 0.0
@@ -96,7 +105,15 @@ class TurtleBot3WorldEnv(turtlebot3traffic_env.TurtleBot3Env):
             linear_speed = self.linear_forward_speed
             angular_speed = 0.0
             self.last_action = "FORWARDS"
-        elif action == 1: #STOP
+        elif action == 1: #LEFT
+            linear_speed = self.linear_turn_speed
+            angular_speed = self.angular_speed
+            self.last_action = "TURN_LEFT"
+        elif action == 2: #RIGHT
+            linear_speed = self.linear_turn_speed
+            angular_speed = -1*self.angular_speed
+            self.last_action = "TURN_RIGHT"
+        elif action == 3: #STOP
             linear_speed = 0.0
             angular_speed = 0.0
             self.last_action = "STOPS"
@@ -109,13 +126,14 @@ class TurtleBot3WorldEnv(turtlebot3traffic_env.TurtleBot3Env):
     def _get_obs(self):
         """
         Here we define what sensor data defines our robots observations
-        To know which Variables we have acces to, we need to see the
-        TurtleBot3Env 
+        To know which Variables we have acces to, we need to read the
+        TurtleBot3Env
         :return:
         """
         rospy.logdebug("Start Get Observation ==>")
         # We get the camera image
         camera_image = self.get_camera_image()
+        odom = self.get_odom()
 
         discretized_observations = self.discretize_camera_observation(camera_image)
 
@@ -129,12 +147,17 @@ class TurtleBot3WorldEnv(turtlebot3traffic_env.TurtleBot3Env):
 
         # Now we check if it has crashed based on the contact state
         contacts_state_data = self.get_contacts_state()
+        odom_state = self.get_odom()
         
         if (contacts_state_data.states != []):
             rospy.logerr("TurtleBot3 Failed")
             self._episode_done = True
+        elif (odom_state.pose.pose.position.x > 1.3):
+            rospy.logerr("TurtleBot3 finished")
+            self._episode_done = True
         else:
             rospy.logerr("TurtleBot3 DIDNT Fail")
+
 
         return self._episode_done
 
@@ -143,10 +166,16 @@ class TurtleBot3WorldEnv(turtlebot3traffic_env.TurtleBot3Env):
         if not done:
             if self.last_action == "FORWARDS":
                 reward = self.forwards_reward
+            elif self.last_action == "STOPS":
+                reward = self.stops_reward
             else:
-                reward = self.stop_reward
+                reward = self.turn_reward
         else:
-            reward = -1*self.end_episode_points
+            odom_state = self.get_odom()
+            if (odom_state.pose.pose.position.x > 1.3):
+                reward = self.end_episode_points
+            else:
+                reward = -1*self.end_episode_points
 
 
         rospy.logdebug("reward=" + str(reward))
@@ -162,7 +191,8 @@ class TurtleBot3WorldEnv(turtlebot3traffic_env.TurtleBot3Env):
 
     def discretize_camera_observation(self,data):
         """
-        Get data of camera Image message
+        Discards all the laser readings that are not multiple in index of new_ranges
+        value.
         """
         self._episode_done = False
 

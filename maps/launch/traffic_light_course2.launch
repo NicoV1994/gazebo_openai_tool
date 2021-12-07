@@ -34,4 +34,5 @@
   <param name="all_lights_sdf" textfile="$(find maps)/models/traffic_light/lights/all_lights/model.sdf"/>
   <node name="spawn_model_all_lights" pkg="gazebo_ros" type="spawn_model" output="screen" args="-sdf -param all_lights_sdf -model all_lights -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/> 
 
+  <node pkg="maps" name="traffic_lights_controller" type="control_traffic_light.py" output="screen" respawn="true"/>
 </launch>

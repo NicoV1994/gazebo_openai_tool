@@ -69,6 +69,8 @@ if __name__ == '__main__':
         # Initialize the environment and get first state of the robot
         observation = env.reset()
 
+        time.sleep(1)
+
         state = ''.join(map(str, observation))
 
 

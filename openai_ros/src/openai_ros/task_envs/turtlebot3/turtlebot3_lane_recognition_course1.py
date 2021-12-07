@@ -22,6 +22,9 @@ class TurtleBot3WorldEnv(turtlebot3camera_env.TurtleBot3Env):
                                                " DOESNT exist, execute: mkdir -p " + ros_ws_abspath + \
                                                "/src;cd " + ros_ws_abspath + ";catkin_make"
 
+        robot_launch_file = 'spawn_turtlebot3_lane_recognition.launch'#rospy.get_param("/turtlebot3/robot_launch_file", None)
+
+
         ROSLauncher(rospackage_name="maps",
                     launch_file_name="lane_recognition_course1.launch",
                     ros_ws_abspath=ros_ws_abspath)
@@ -33,7 +36,7 @@ class TurtleBot3WorldEnv(turtlebot3camera_env.TurtleBot3Env):
 
 
         # Here we will add any init functions prior to starting the MyRobotEnv
-        super(TurtleBot3WorldEnv, self).__init__(ros_ws_abspath)
+        super(TurtleBot3WorldEnv, self).__init__(ros_ws_abspath,robot_launch_file)
 
         # Only variable needed to be set here
         number_actions = rospy.get_param('/turtlebot3/n_actions')

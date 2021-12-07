@@ -5,7 +5,7 @@
     <static>true</static>
 
     <link name='Yellow_light_source'>
-      <pose>-0.23 0 0.504 1.57 0 0</pose>
+      <pose>-0.23 0 0.48 1.57 0 0</pose>
       
       <light name='yellow' type='spot'>
         <pose>0 0 0.0 1.57 0 0</pose>
@@ -46,7 +46,7 @@
     </link>
 
     <link name='Red_light_source'>
-      <pose>-0.332 0 0.504 1.57 0 0</pose>
+      <pose>-0.332 0 0.48 1.57 0 0</pose>
 
       <light name='red' type='spot'>
         <pose>0 0 0.0 1.57 0 0</pose>
@@ -88,7 +88,7 @@
 
     <link name='Green_light_source'>
       
-      <pose>-0.124 0 0.504 1.57 0 0</pose>
+      <pose>-0.124 0 0.48 1.57 0 0</pose>
       
       <light name='green' type='spot'>
         <pose>0 0 0.0 1.57 0 0</pose>
@@ -132,16 +132,12 @@
       <light>
         <id>Yellow_light_source/yellow</id>
         <block>
-          <duration>1</duration>
-          <interval>5</interval>
-        </block>
-        <block>
-          <duration>4</duration>
-          <interval>4</interval>
-        </block>
-        <block>
           <duration>0</duration>
-          <interval>4</interval>
+          <interval>3</interval>
+        </block>
+        <block>
+          <duration>1</duration>
+          <interval>0</interval>
         </block>
         <enable>true</enable>
       </light>
@@ -149,8 +145,8 @@
       <light>
         <id>Red_light_source/red</id>
         <block>
-          <duration>2</duration>
-          <interval>5</interval>
+          <duration>4</duration>
+          <interval>4</interval>
         </block>
         <enable>true</enable>
       </light>
@@ -158,16 +154,12 @@
       <light>
         <id>Green_light_source/green</id>
         <block>
-          <duration>1</duration>
-          <interval>5</interval>
-        </block>
-        <block>
-          <duration>4</duration>
-          <interval>4</interval>
-        </block>
-        <block>
           <duration>0</duration>
           <interval>4</interval>
+        </block>
+        <block>
+          <duration>3</duration>
+          <interval>1</interval>
         </block>
         <enable>true</enable>
       </light>
