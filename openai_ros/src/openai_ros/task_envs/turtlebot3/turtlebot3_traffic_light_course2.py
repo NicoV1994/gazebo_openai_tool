@@ -21,8 +21,7 @@ class TurtleBot3WorldEnv(turtlebot3camera_env.TurtleBot3Env):
                                                " DOESNT exist, execute: mkdir -p " + ros_ws_abspath + \
                                                "/src;cd " + ros_ws_abspath + ";catkin_make"
 
-        robot_launch_file = 'spawn_turtlebot3_traffic_light.launch'#rospy.get_param("/turtlebot3/robot_launch_file", None)
-
+        robot_launch_file = 'spawn_turtlebot3_traffic_light.launch'
 
         ROSLauncher(rospackage_name="maps",
                     launch_file_name="traffic_light_course2.launch",
@@ -101,7 +100,7 @@ class TurtleBot3WorldEnv(turtlebot3camera_env.TurtleBot3Env):
 
         rospy.logdebug("Start Set Action ==>"+str(action))
         # We convert the actions to speed movements to send to the parent class CubeSingleDiskEnv
-        if action == 0: #FORWARD
+        if action == 3: #FORWARD
             linear_speed = self.linear_forward_speed
             angular_speed = 0.0
             self.last_action = "FORWARDS"
@@ -113,7 +112,7 @@ class TurtleBot3WorldEnv(turtlebot3camera_env.TurtleBot3Env):
             linear_speed = self.linear_turn_speed
             angular_speed = -1*self.angular_speed
             self.last_action = "TURN_RIGHT"
-        elif action == 3: #STOP
+        elif action == 0: #STOP
             linear_speed = 0.0
             angular_speed = 0.0
             self.last_action = "STOPS"

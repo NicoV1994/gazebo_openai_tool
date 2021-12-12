@@ -44,18 +44,6 @@
         </visual>
         </link>
 
-
-    <plugin name='green_light_controller' filename='libLedPlugin.so'>
-      <enable>true</enable>
-      
-      <light>
-        <id>Green_light_source/green</id>
-        <duration>10</duration>
-        <interval>10</interval>
-        <enable>true</enable>
-      </light>
-
-      </plugin>
   </model>
 
 </sdf>

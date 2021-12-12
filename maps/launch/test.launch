@@ -1,0 +1,3 @@
+<launch>
+  <node pkg="maps" name="traffic_lights_controller" type="control_traffic_light.py" output="screen" respawn="false"/>
+</launch>
