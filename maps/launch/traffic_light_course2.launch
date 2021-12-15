@@ -16,27 +16,5 @@
   <arg name="roll" default="0.0" />
   <arg name="pitch" default="0.0" />
   <arg name="yaw" default="-1.565" />
-  
-  <arg name="debug" default="true" />
 
-  <!--
-  <param name="traffic_stand_sdf" textfile="$(find maps)/models/traffic_light/traffic_bar_stand/model.sdf"/>
-  <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" output="screen" args="-sdf -param traffic_stand_sdf -model traffic_stand -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/> 
-  
-  
-  <param name="green_light_sdf" textfile="$(find maps)/models/traffic_light/lights/green_light/model.sdf"/>
-  <node name="spawn_model_green_light" pkg="gazebo_ros" type="spawn_model" output="screen" args="-sdf -param green_light_sdf -model green_light -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/> 
-  
-  <param name="yellow_light_sdf" textfile="$(find maps)/models/traffic_light/lights/yellow_light/model.sdf"/>
-  <node name="spawn_model_yellow_light" pkg="gazebo_ros" type="spawn_model" output="screen" args="-sdf -param yellow_light_sdf -model yellow_light -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/> 
-  
-  <param name="red_light_sdf" textfile="$(find maps)/models/traffic_light/lights/red_light/model.sdf"/>
-  <node name="spawn_model_red_light" pkg="gazebo_ros" type="spawn_model" output="screen" args="-sdf -param red_light_sdf -model red_light -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/> 
-  
-  
-  <param name="all_lights_sdf" textfile="$(find maps)/models/traffic_light/lights/all_lights/model.sdf"/>
-  <node name="spawn_model_all_lights" pkg="gazebo_ros" type="spawn_model" output="screen" args="-sdf -param all_lights_sdf -model all_lights -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/> 
-  -->
-
-  <node pkg="maps" name="traffic_lights_controller" type="control_traffic_light.py" output="screen" respawn="false"/>
 </launch>

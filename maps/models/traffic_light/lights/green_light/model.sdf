@@ -6,7 +6,7 @@
 
       <link name='Green_light_source'>
         
-        <pose>-0.124 0 0.504 1.57 0 0</pose>
+        <pose>-0.124 0 0.48 1.57 0 0</pose>
         
         <light name='green' type='spot'>
           <pose>0 0 0.0 1.57 0 0</pose>

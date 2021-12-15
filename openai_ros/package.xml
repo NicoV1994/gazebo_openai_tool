@@ -40,7 +40,6 @@
   <exec_depend>python-numpy</exec_depend>
   -->
 
-
   <export>
     <rosdoc config="rosdoc.yaml"/>
   </export>

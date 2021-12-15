@@ -7,6 +7,7 @@ from geometry_msgs.msg import Vector3
 from openai_ros.task_envs.task_commons import LoadYamlFileParamsTest
 from openai_ros.openai_ros_common import ROSLauncher
 import os
+from traffic_light.control_traffic_light import ControlTrafficLights
 
 class TurtleBot3WorldEnv(turtlebot3camera_env.TurtleBot3Env):
     def __init__(self):
@@ -35,6 +36,8 @@ class TurtleBot3WorldEnv(turtlebot3camera_env.TurtleBot3Env):
 
         # Here we will add any init functions prior to starting the MyRobotEnv
         super(TurtleBot3WorldEnv, self).__init__(ros_ws_abspath,robot_launch_file)
+
+        self.traffic_lights_controller = ControlTrafficLights()
 
         # Only variable needed to be set here
         number_actions = rospy.get_param('/turtlebot3/n_actions')
@@ -90,6 +93,9 @@ class TurtleBot3WorldEnv(turtlebot3camera_env.TurtleBot3Env):
         # Set to false Done, because its calculated asyncronously
         self._episode_done = False
 
+        self.traffic_lights_controller.resetLights()
+
+
 
     def _set_action(self, action):
         """
@@ -100,7 +106,7 @@ class TurtleBot3WorldEnv(turtlebot3camera_env.TurtleBot3Env):
 
         rospy.logdebug("Start Set Action ==>"+str(action))
         # We convert the actions to speed movements to send to the parent class CubeSingleDiskEnv
-        if action == 3: #FORWARD
+        if action == 0: #FORWARD
             linear_speed = self.linear_forward_speed
             angular_speed = 0.0
             self.last_action = "FORWARDS"
@@ -112,7 +118,7 @@ class TurtleBot3WorldEnv(turtlebot3camera_env.TurtleBot3Env):
             linear_speed = self.linear_turn_speed
             angular_speed = -1*self.angular_speed
             self.last_action = "TURN_RIGHT"
-        elif action == 0: #STOP
+        elif action == 3: #STOP
             linear_speed = 0.0
             angular_speed = 0.0
             self.last_action = "STOPS"
@@ -151,12 +157,16 @@ class TurtleBot3WorldEnv(turtlebot3camera_env.TurtleBot3Env):
         if (contacts_state_data.states != []):
             rospy.logerr("TurtleBot3 Failed")
             self._episode_done = True
+        elif (self.traffic_lights_controller.traffic_state == 1) and (odom_state.pose.pose.position.x > 0) and (odom_state.pose.pose.position.x < 0.2):
+            rospy.logerr("TurtleBot3 IGNORED red light")
+            self._episode_done = True
         elif (odom_state.pose.pose.position.x > 1.3):
-            rospy.logerr("TurtleBot3 finished")
+            rospy.logerr("TurtleBot3 Finished")
             self._episode_done = True
         else:
             rospy.logerr("TurtleBot3 DIDNT Fail")
 
+        self.traffic_lights_controller.updateTrafficLightState()
 
         return self._episode_done
 
