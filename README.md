@@ -9,11 +9,12 @@ This work builds on the [openai_ros package](http://wiki.ros.org/openai_ros).
 
 -----
 ## Table of Contents
+- [Tool](#tool)
 - [Environments](#environments)
 - [Setup](#setup)
 - [Usage](#usage)
 
-## Environments
+## Tool
 The environment is structured into four parts: openai_ros, learning, maps and robot_models.
 
 ![structure](imgs/structure.png)
@@ -42,7 +43,7 @@ The training scripts are totally independent from the environments. So you can c
 It is structured in a way that the `task environment` only has to use one launch file to load the whole map and all assets in it.
 
 Implemented maps are:
-TODO
+lane_recognition_course1, traffic_light_course2
 
 ### robot_models
 `robot_models` is used to store all robot related packages like robot descriptions and sensors.
@@ -50,6 +51,12 @@ It is structured in a way that the `robot environment` of `openai_ros` only has 
 
 Implemented robots are:
 Turtlebot3
+
+## Environments
+| Name | Middleware | Description | Implemented Algorithms|
+| ---- | ------ | ----------- | ----- |
+| ![Turtlebot3LaneRecognitionCourse1-v0](imgs/lr.png)`Turtlebot3LaneRecognitionCourse1-v0` | ROS | A simple circuit to train a Turtlebot3 for lane recognition. Turtlebot uses camera as obsercation. Invisible walls and contact sensor on the Turtlebot are used to recognise failure. | Q-learning |
+| ![Turtlebot3TrafficLightCourse2-v0](imgs/tl.png)`Turtlebot3TrafficLightCourse2-v0` | ROS | A simple circuit to train a Turtlebot3 for traffic light recognition. Turtlebot uses camera as obsercation. Position on the course as well as invisible walls and contact sensor on the Turtlebot are used to recognise failure. | Q-learning |
 
 ## Setup
 ### Installation
