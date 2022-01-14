@@ -190,12 +190,29 @@ echo "alias killgazebogym='killall -9 rosout roslaunch rosmaster gzserver nodele
 ```
 
 ### Docker
-TODO
+Unfortunately there is a problem with the implemented tasks if they are used inside of a docker container. 
+The camera of the Turtlebot3 is not recognised.
 
 ## Usage
 To use the Tool you have to run the start_training launch file from the learning folder.
+lane_recognition_course1
 ```bash
 roslaunch learning start_training_wl_lr_course1_turtlebot3.launch
 ```
 
-TODO
+traffic_light_course2
+```bash
+roslaunch learning start_training_wl_tl_course2_turtlebot3.launch
+```
+
+To change the settings you just have to eddit the configuration file under /learning/config/ .
+
+Use rqt to look at the cameraoutput of the roboter.
+```bash
+rqt
+```
+
+Install rqt_multiplot to plot the rewards per episode.
+```bash
+rosrun rqt_multiplot rqt_multiplot
+```
