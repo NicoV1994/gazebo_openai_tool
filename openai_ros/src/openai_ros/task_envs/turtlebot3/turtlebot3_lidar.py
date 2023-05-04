@@ -23,7 +23,7 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
                                                " DOESNT exist, execute: mkdir -p " + ros_ws_abspath + \
                                                "/src;cd " + ros_ws_abspath + ";catkin_make"
 
-        robot_launch_file = 'spawn_turtlebot3_lane_recognition.launch'#rospy.get_param("/turtlebot3/robot_launch_file", None)
+        robot_launch_file = 'spawn_turtlebot3_lidar.launch'#rospy.get_param("/turtlebot3/robot_launch_file", None)
 
         ROSLauncher(rospackage_name="maps",
                     launch_file_name="lidar_course1.launch",
@@ -167,9 +167,9 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
     def _is_done(self, observations):
 
         if self._episode_done:
-            rospy.logerr("TurtleBot2 is Too Close to wall==>")
+            rospy.logerr("TurtleBot3 is Too Close to wall==>")
         else:
-            rospy.logwarn("TurtleBot2 is NOT close to a wall ==>")
+            rospy.logwarn("TurtleBot3 is NOT close to a wall ==>")
 
         # Now we check if it has crashed based on the imu
         imu_data = self.get_imu()
@@ -178,7 +178,13 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
             rospy.logerr("TurtleBot2 Crashed==>"+str(linear_acceleration_magnitude)+">"+str(self.max_linear_aceleration))
             self._episode_done = True
         else:
-            rospy.logerr("DIDNT crash TurtleBot2 ==>"+str(linear_acceleration_magnitude)+">"+str(self.max_linear_aceleration))
+            #Check if we reached Finish
+            odom_state = self.get_odom()
+            if (odom_state.pose.pose.position.x > 1.6 and odom_state.pose.pose.position.y > 1.6):
+                rospy.logerr("TurtleBot2 Reached the End==>"+str(linear_acceleration_magnitude)+">"+str(self.max_linear_aceleration))
+                self._episode_done = True
+            else:
+                rospy.logerr("DIDNT crash TurtleBot2 ==>"+str(linear_acceleration_magnitude)+">"+str(self.max_linear_aceleration))
 
 
         return self._episode_done
@@ -191,7 +197,11 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
             else:
                 reward = self.turn_reward
         else:
-            reward = -1*self.end_episode_points
+            odom_state = self.get_odom()
+            if (odom_state.pose.pose.position.x > 1.6 and odom_state.pose.pose.position.y > 1.6):
+                reward = self.end_episode_points
+            else:
+                reward = -1*self.end_episode_points
 
 
         rospy.logdebug("reward=" + str(reward))

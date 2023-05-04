@@ -1,6 +1,6 @@
 <launch>
-  <arg name="x_pos" default="-1.0"/>
-  <arg name="y_pos" default="-1.775"/>
+  <arg name="x_pos" default="-1.7"/>
+  <arg name="y_pos" default="-1.68"/>
   <arg name="z_pos" default="0"/>  
 
   <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_burger.urdf.xacro" />

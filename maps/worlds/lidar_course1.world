@@ -71,13 +71,15 @@
     </include>
 
     <include>
-      <uri>model://lane_recognition_course1/course</uri>
+      <uri>model://lidar_course1/course</uri>
     </include>
 
     <include>
-      <uri>model://lane_recognition_course1/walls</uri>
+      <uri>model://lidar_course1/Outer_Walls</uri>
     </include>
 
-
+    <include>
+      <uri>model://lidar_course1/Maze1</uri>
+    </include>
   </world>
 </sdf>

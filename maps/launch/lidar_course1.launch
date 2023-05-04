@@ -1,5 +1,5 @@
 <launch>
-  <env name="GAZEBO_RESOURCE_PATH" value="$(find maps)/models/lane_recognition_course1/ground_picture" />
+  <env name="GAZEBO_RESOURCE_PATH" value="$(find maps)/models/lidar_course1/ground_picture" />
   
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find maps)/worlds/lidar_course1.world" />
