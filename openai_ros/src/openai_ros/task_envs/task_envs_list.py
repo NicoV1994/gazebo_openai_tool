@@ -38,6 +38,17 @@ def RegisterOpenAI_Ros_Env(task_env, max_episode_steps=10000):
         # import our training environment
         from openai_ros.task_envs.turtlebot3 import turtlebot3_traffic_light_course2
 
+    elif task_env == 'Turtlebot3LiDARCourse1-v0':
+
+        register(
+            id=task_env,
+            entry_point='openai_ros.task_envs.turtlebot3.turtlebot3_lidar:TurtleBot3WorldEnv',
+            max_episode_steps=max_episode_steps,
+        )
+
+        # import our training environment
+        from openai_ros.task_envs.turtlebot3 import turtlebot3_lidar
+
     # Cubli Moving Cube
     elif task_env == 'MovingCubeOneDiskWalk-v0':
         print("Import module")

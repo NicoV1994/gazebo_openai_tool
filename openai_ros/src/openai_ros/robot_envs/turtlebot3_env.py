@@ -17,7 +17,7 @@ class TurtleBot3Env(robot_gazebo_env.RobotGazeboEnv):
     """Superclass for all CubeSingleDisk environments.
     """
 
-    def __init__(self, ros_ws_abspath):
+    def __init__(self, ros_ws_abspath, robot_launch_file):
         """
         Initializes a new TurtleBot3Env environment.
         TurtleBot3 doesnt use controller_manager, therefore we wont reset the
@@ -46,8 +46,8 @@ class TurtleBot3Env(robot_gazebo_env.RobotGazeboEnv):
         # None in this case
 
         # We launch the ROSlaunch that spawns the robot into the world
-        ROSLauncher(rospackage_name="turtlebot3_gazebo",
-                    launch_file_name="put_robot_in_world.launch",
+        ROSLauncher(rospackage_name="spawn_robots",
+                    launch_file_name=robot_launch_file,
                     ros_ws_abspath=ros_ws_abspath)
 
         # Internal Vars
