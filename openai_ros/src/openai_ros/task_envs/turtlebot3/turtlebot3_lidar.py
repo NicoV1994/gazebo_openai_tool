@@ -1,3 +1,4 @@
+import math
 import rospy
 import numpy
 from gym import spaces
@@ -154,10 +155,17 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
         rospy.logdebug("Start Get Observation ==>")
         # We get the laser scan data
         laser_scan = self.get_laser_scan()
+        odom = self.get_odom()
+        print("X: ", odom.pose.pose.position.x , "Y: ", odom.pose.pose.position.y)
+        xy = [odom.pose.pose.position.x, odom.pose.pose.position.y]
 
         discretized_observations = self.discretize_scan_observation(    laser_scan,
                                                                         self.new_ranges
                                                                         )
+        
+        discretized_observations.append(xy[0])
+        discretized_observations.append(xy[1])
+        print("Laser x6, X, Y: ", discretized_observations)
 
         rospy.logdebug("Observations==>"+str(discretized_observations))
         rospy.logdebug("END Get Observation ==>")
@@ -191,11 +199,14 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
 
     def _compute_reward(self, observations, done):
 
+        def location_reward(x, y):
+            return math.sqrt((1.6 - x)**2 + (1.6 - y)**2)
+
         if not done:
             if self.last_action == "FORWARDS":
-                reward = self.forwards_reward
+                reward = self.forwards_reward + location_reward(observations[-2], observations[-1])
             else:
-                reward = self.turn_reward
+                reward = self.turn_reward + location_reward(observations[-2], observations[-1])
         else:
             odom_state = self.get_odom()
             if (odom_state.pose.pose.position.x > 1.6 and odom_state.pose.pose.position.y > 1.6):

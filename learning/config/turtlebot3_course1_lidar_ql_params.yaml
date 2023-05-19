@@ -1,14 +1,13 @@
 turtlebot3: #namespace
-    task_and_robot_environment_name: 'Turtlebot3LiDARCourse1-v0'
-    ros_ws_abspath: "/home/catkin_ws"
-    running_step: 0.04 # amount of time the control will be executed
-    pos_step: 0.016    # increment in position for each command
-    
-    #qlearn parameters
-    alpha: 0.1 #Learning rate
-    gamma: 0.7 #Discount factor
-    epsilon: 0.9 #
-    epsilon_discount: 0.999
-    nepisodes: 5000
-    nsteps: 10000
-    running_step: 0.06 # Time for each step
+  task_and_robot_environment_name: "Turtlebot3LiDARCourse1-v0"
+  ros_ws_abspath: "/home/catkin_ws"
+  running_step: 0.04 # amount of time the control will be executed
+  pos_step: 0.016 # increment in position for each command
+
+  #qlearn parameters
+  alpha: 0.1 #Learning rate
+  gamma: 0.9 #Discount factor
+  epsilon: 0.1 #
+  epsilon_discount: 0.99
+  nepisodes: 5000
+  nsteps: 10000
