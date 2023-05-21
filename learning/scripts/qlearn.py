@@ -11,11 +11,17 @@ import random
 
 class QLearn:
     def __init__(self, actions, epsilon, alpha, gamma):
-        self.q = {}
+        self.q = {}             # state-action values
         self.epsilon = epsilon  # exploration constant
         self.alpha = alpha      # discount constant
         self.gamma = gamma      # discount factor
         self.actions = actions
+    
+    def printQ(self):
+        print('Q table:')
+        print('(state , action) reward')
+        for k in self.q:
+            print(k, self.q[k])
 
     def getQ(self, state, action):
         return self.q.get((state, action), 0.0)

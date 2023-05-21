@@ -161,14 +161,22 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
         discretized_observations = self.discretize_scan_observation(    laser_scan,
                                                                         self.new_ranges
                                                                         )
-        
-        discretized_observations.append(xy[0])
-        discretized_observations.append(xy[1])
-        print("Laser (0°, 50°, 310°), X, Y: ", discretized_observations)
+        observation = []
+        laser0 = discretized_observations[0]
+        laser50 = discretized_observations[1]
+        laser310 = discretized_observations[4]
 
-        rospy.logdebug("Observations==>"+str(discretized_observations))
+        observation.append(laser0)
+        observation.append(laser50)
+        observation.append(laser310)
+
+        observation.append(xy[0])
+        observation.append(xy[1])
+        print("Laser (0°, 50°, 310°), X, Y: ", observation)
+
+        rospy.logdebug("Observations==>"+str(observation))
         rospy.logdebug("END Get Observation ==>")
-        return discretized_observations
+        return observation
 
 
     def _is_done(self, observations):
@@ -198,14 +206,23 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
 
     def _compute_reward(self, observations, done):
 
-        def location_reward(x, y):
-            return math.sqrt((1.6 - x)**2 + (1.6 - y)**2)
+        def location_reward(current_x, current_y, goal_x, goal_y):
+            reward = ((2 + current_x) + (2 + current_y)) * 10
+            return int(reward)
+        
+        def proximity_reward(laser0, laser50, laser310):
+            if (laser0 < 0.5):
+                return -100
+            elif (laser50 < 0.3 or laser310 < 0.3):
+                return -10
+            else:
+                return 0
 
         if not done:
             if self.last_action == "FORWARDS":
-                reward = self.forwards_reward + location_reward(observations[-2], observations[-1])
+                reward = self.forwards_reward + location_reward(observations[-2], observations[-1], 1.6, 1.6) + proximity_reward(observations[0], observations[1], observations[2])
             else:
-                reward = self.turn_reward + location_reward(observations[-2], observations[-1])
+                reward = location_reward(observations[-2], observations[-1], 1.6, 1.6) + proximity_reward(observations[0], observations[1], observations[2])
         else:
             odom_state = self.get_odom()
             if (odom_state.pose.pose.position.x > 1.6 and odom_state.pose.pose.position.y > 1.6):
@@ -234,20 +251,19 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
 
         discretized_ranges = []
         mod = len(data.ranges)/new_ranges
-        print("mod: ", mod)
 
         rospy.logdebug("data=" + str(data))
         rospy.logdebug("new_ranges=" + str(new_ranges))
         rospy.logdebug("mod=" + str(mod))
 
         for i, item in enumerate(data.ranges):
-            if (i==0 or i==75 or i==285):
+            if (i==0 or i==50 or i==310 or i==90 or i==270):
                 if item == float ('Inf') or numpy.isinf(item):
                     discretized_ranges.append(self.max_laser_value)
                 elif numpy.isnan(item):
                     discretized_ranges.append(self.min_laser_value)
                 else:
-                    discretized_ranges.append(int(item))
+                    discretized_ranges.append(round(item,1))
 
                 if (self.min_range > item > 0):
                     rospy.logerr("done Validation >>> item=" + str(item)+"< "+str(self.min_range))
@@ -255,7 +271,6 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
                 else:
                     rospy.logdebug("NOT done Validation >>> item=" + str(item)+"< "+str(self.min_range))
 
-        print(discretized_ranges)
         return discretized_ranges
 
 
