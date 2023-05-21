@@ -120,7 +120,7 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
 
     def _set_action(self, action):
         """
-        This set action will Set the linear and angular speed of the turtlebot2
+        This set action will Set the linear and angular speed of the turtlebot3
         based on the action number given.
         :param action: The action integer that set s what movement to do next.
         """
@@ -140,7 +140,7 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
             angular_speed = -1*self.angular_speed
             self.last_action = "TURN_RIGHT"
 
-        # We tell TurtleBot2 the linear and angular speed to set to execute
+        # We tell TurtleBot3 the linear and angular speed to set to execute
         self.move_base(linear_speed, angular_speed, epsilon=0.05, update_rate=10)
 
         rospy.logdebug("END Set Action ==>"+str(action))
@@ -149,7 +149,7 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
         """
         Here we define what sensor data defines our robots observations
         To know which Variables we have acces to, we need to read the
-        TurtleBot2Env API DOCS
+        TurtleBot3Env API DOCS
         :return:
         """
         rospy.logdebug("Start Get Observation ==>")
@@ -157,7 +157,7 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
         laser_scan = self.get_laser_scan()
         odom = self.get_odom()
         print("X: ", odom.pose.pose.position.x , "Y: ", odom.pose.pose.position.y)
-        xy = [odom.pose.pose.position.x, odom.pose.pose.position.y]
+        xy = [round(odom.pose.pose.position.x, 1), round(odom.pose.pose.position.y, 1)]
 
         discretized_observations = self.discretize_scan_observation(    laser_scan,
                                                                         self.new_ranges
@@ -165,7 +165,7 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
         
         discretized_observations.append(xy[0])
         discretized_observations.append(xy[1])
-        print("Laser x6, X, Y: ", discretized_observations)
+        print("Laser x", self.new_ranges , ", X, Y: ", discretized_observations)
 
         rospy.logdebug("Observations==>"+str(discretized_observations))
         rospy.logdebug("END Get Observation ==>")
@@ -183,16 +183,16 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
         imu_data = self.get_imu()
         linear_acceleration_magnitude = self.get_vector_magnitude(imu_data.linear_acceleration)
         if linear_acceleration_magnitude > self.max_linear_aceleration:
-            rospy.logerr("TurtleBot2 Crashed==>"+str(linear_acceleration_magnitude)+">"+str(self.max_linear_aceleration))
+            rospy.logerr("TurtleBot3 Crashed==>"+str(linear_acceleration_magnitude)+">"+str(self.max_linear_aceleration))
             self._episode_done = True
         else:
             #Check if we reached Finish
             odom_state = self.get_odom()
             if (odom_state.pose.pose.position.x > 1.6 and odom_state.pose.pose.position.y > 1.6):
-                rospy.logerr("TurtleBot2 Reached the End==>"+str(linear_acceleration_magnitude)+">"+str(self.max_linear_aceleration))
+                rospy.logerr("TurtleBot3 Reached the End==>"+str(linear_acceleration_magnitude)+">"+str(self.max_linear_aceleration))
                 self._episode_done = True
             else:
-                rospy.logerr("DIDNT crash TurtleBot2 ==>"+str(linear_acceleration_magnitude)+">"+str(self.max_linear_aceleration))
+                rospy.logerr("DIDNT crash TurtleBot3 ==>"+str(linear_acceleration_magnitude)+">"+str(self.max_linear_aceleration))
 
 
         return self._episode_done
@@ -235,6 +235,7 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
 
         discretized_ranges = []
         mod = len(data.ranges)/new_ranges
+        print("mod: ", mod)
 
         rospy.logdebug("data=" + str(data))
         rospy.logdebug("new_ranges=" + str(new_ranges))
@@ -255,7 +256,7 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
                 else:
                     rospy.logdebug("NOT done Validation >>> item=" + str(item)+"< "+str(self.min_range))
 
-
+        print(discretized_ranges)
         return discretized_ranges
 
 
