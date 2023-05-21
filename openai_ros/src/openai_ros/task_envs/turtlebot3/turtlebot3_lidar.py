@@ -156,7 +156,6 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
         # We get the laser scan data
         laser_scan = self.get_laser_scan()
         odom = self.get_odom()
-        print("X: ", odom.pose.pose.position.x , "Y: ", odom.pose.pose.position.y)
         xy = [round(odom.pose.pose.position.x, 1), round(odom.pose.pose.position.y, 1)]
 
         discretized_observations = self.discretize_scan_observation(    laser_scan,
@@ -165,7 +164,7 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
         
         discretized_observations.append(xy[0])
         discretized_observations.append(xy[1])
-        print("Laser x", self.new_ranges , ", X, Y: ", discretized_observations)
+        print("Laser (0°, 50°, 310°), X, Y: ", discretized_observations)
 
         rospy.logdebug("Observations==>"+str(discretized_observations))
         rospy.logdebug("END Get Observation ==>")
@@ -242,7 +241,7 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
         rospy.logdebug("mod=" + str(mod))
 
         for i, item in enumerate(data.ranges):
-            if (i%mod==0):
+            if (i==0 or i==75 or i==285):
                 if item == float ('Inf') or numpy.isinf(item):
                     discretized_ranges.append(self.max_laser_value)
                 elif numpy.isnan(item):
