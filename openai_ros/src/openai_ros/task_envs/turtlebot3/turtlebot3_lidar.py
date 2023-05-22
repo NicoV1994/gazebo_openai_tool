@@ -167,17 +167,17 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
                                                                         self.new_ranges
                                                                         )
         observation = []
-        laser0 = discretized_observations[0]
-        laser50 = discretized_observations[1]
-        laser310 = discretized_observations[4]
+        laser_center = discretized_observations[0]
+        laser_left = discretized_observations[1]
+        laser_right = discretized_observations[2]
 
-        observation.append(laser0)
-        observation.append(laser50)
-        observation.append(laser310)
+        observation.append(laser_center)
+        observation.append(laser_left)
+        observation.append(laser_right)
 
         observation.append(xy[0])
         observation.append(xy[1])
-        print("Laser (0°, 50°, 310°), X, Y: ", observation)
+        print("Laser (0°, 55°, 305°), X, Y: ", observation)
 
         rospy.logdebug("Observations==>"+str(observation))
         rospy.logdebug("END Get Observation ==>")
@@ -215,34 +215,34 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
             reward = ((2 + current_x) + (2 + current_y)) * 10
             return int(reward)
         
-        def proximity_reward(laser0, laser50, laser310):
-            if (laser0 < 0.5):
+        def proximity_reward(laser_front, laser_left, laser_right):
+            if (laser_front < 0.5):
                 return -100
-            elif (laser50 < 0.3 or laser310 < 0.3):
-                return -10
+            elif (laser_left < 0.3 or laser_right < 0.3):
+                return -20
             else:
                 return 0
 
         if not done:
             if self.last_action == "FORWARDS":
-                reward = self.forwards_reward + location_reward(observations[-2], observations[-1], 1.6, 1.6) + proximity_reward(observations[0], observations[1], observations[4])
+                reward = self.forwards_reward + location_reward(observations[-2], observations[-1], 1.6, 1.6) + proximity_reward(observations[0], observations[1], observations[2])
             else:
-                reward = location_reward(observations[-2], observations[-1], 1.6, 1.6) + proximity_reward(observations[0], observations[1], observations[4])
+                reward = location_reward(observations[-2], observations[-1], 1.6, 1.6) + proximity_reward(observations[0], observations[1], observations[2])
         else:
             odom_state = self.get_odom()
             if (odom_state.pose.pose.position.x > 1.6 and odom_state.pose.pose.position.y > 1.6):
-                reward = self.end_episode_points
+                reward = self.end_episode_points + 800
             else:
                 reward = -1*self.end_episode_points
 
         if not self.checkpoint1:
-            if ( (observation[-2] > 1.4) and (observation[-1] > -1.5) ):
-                reward += 100
+            if ( (observations[-2] > 1.4) and (observations[-1] > -1.5) ):
+                reward += 200
                 self.checkpoint1 = True
                 
         if not self.checkpoint2:
-            if ( (observation[-2] > 1.4) and (observation[-1] > 0.5) ):
-                reward += 100
+            if ( (observations[-2] > 1.4) and (observations[-1] > 0.5) ):
+                reward += 500
                 self.checkpoint2 = True
 
         rospy.logdebug("reward=" + str(reward))
@@ -271,7 +271,7 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
         rospy.logdebug("mod=" + str(mod))
 
         for i, item in enumerate(data.ranges):
-            if (i==0 or i==50 or i==310 or i==90 or i==270):
+            if (i==0 or i==55 or i==305):
                 if item == float ('Inf') or numpy.isinf(item):
                     discretized_ranges.append(self.max_laser_value)
                 elif numpy.isnan(item):

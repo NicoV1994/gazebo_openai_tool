@@ -5,9 +5,9 @@ turtlebot3: #namespace
   pos_step: 0.016 # increment in position for each command
 
   #qlearn parameters
-  alpha: 0.1  # Learning rate - Determines how much weight should be given to new information compared to existing knowledge. A higher value (e.g., 0.2) allows for quicker updates based on new experiences.
-  gamma: 0.9  # Discount factor - Determines the importance of future rewards in the learning process. A value of 0.9 implies that the algorithm considers long-term rewards more heavily.
-  epsilon: 0.1  # Exploration rate (initial) - Probability of taking a random action instead of following the learned policy. A higher value (e.g., 0.2) encourages more exploration, allowing the agent to discover new paths.
+  alpha: 0.2  # Learning rate - Determines how much weight should be given to new information compared to existing knowledge. A higher value (e.g., 0.2) allows for quicker updates based on new experiences.
+  gamma: 0.99  # Discount factor - Determines the importance of future rewards in the learning process. A value of 0.9 implies that the algorithm considers long-term rewards more heavily.
+  epsilon: 0.2  # Exploration rate (initial) - Probability of taking a random action instead of following the learned policy. A higher value (e.g., 0.2) encourages more exploration, allowing the agent to discover new paths.
   epsilon_discount: 0.99  # Rate at which exploration rate decreases over time. Multiplying epsilon by epsilon_discount after each episode reduces the exploration rate gradually.
-  nepisodes: 1000  # Number of episodes - Total number of training episodes the agent will experience. A higher value (e.g., 1000) allows for more training and exploration in the environment.
+  nepisodes: 5000  # Number of episodes - Total number of training episodes the agent will experience. A higher value (e.g., 1000) allows for more training and exploration in the environment.
   nsteps: 1000  # Maximum number of steps per episode - Maximum number of steps the agent can take in each episode. Adjust this based on the complexity of the environment and the expected duration of an episode.
