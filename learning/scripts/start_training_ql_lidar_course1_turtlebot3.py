@@ -68,9 +68,10 @@ if __name__ == '__main__':
 
         # Initialize the environment and get first state of the robot
         observation = env.reset()
+        print("observation", observation)
 
         state = ''.join(map(str, observation))
-
+        print("state", state)
 
         # Show on screen the actual situation of the robot
         # env.render()
@@ -123,5 +124,7 @@ if __name__ == '__main__':
     rospy.loginfo("Overall score: {:0.2f}".format(last_time_steps.mean()))
     rospy.loginfo("Best 100 score: {:0.2f}".format(
         reduce(lambda x, y: x + y, l[-100:]) / len(l[-100:])))
+
+    qlearn.printQ()
 
     env.close()

@@ -1,3 +1,4 @@
+import math
 import rospy
 import numpy
 from gym import spaces
@@ -92,6 +93,9 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
         self.end_episode_points = rospy.get_param("/turtlebot3/end_episode_points")
 
         self.cumulated_steps = 0.0
+        
+        self.checkpoint1 = False
+        self.checkpoint2 = False
 
 
     def _set_init_pose(self):
@@ -115,11 +119,13 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
         self.cumulated_reward = 0.0
         # Set to false Done, because its calculated asyncronously
         self._episode_done = False
+        self.checkpoint1 = False
+        self.checkpoint2 = False
 
 
     def _set_action(self, action):
         """
-        This set action will Set the linear and angular speed of the turtlebot2
+        This set action will Set the linear and angular speed of the turtlebot3
         based on the action number given.
         :param action: The action integer that set s what movement to do next.
         """
@@ -139,7 +145,7 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
             angular_speed = -1*self.angular_speed
             self.last_action = "TURN_RIGHT"
 
-        # We tell TurtleBot2 the linear and angular speed to set to execute
+        # We tell TurtleBot3 the linear and angular speed to set to execute
         self.move_base(linear_speed, angular_speed, epsilon=0.05, update_rate=10)
 
         rospy.logdebug("END Set Action ==>"+str(action))
@@ -148,20 +154,34 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
         """
         Here we define what sensor data defines our robots observations
         To know which Variables we have acces to, we need to read the
-        TurtleBot2Env API DOCS
+        TurtleBot3Env API DOCS
         :return:
         """
         rospy.logdebug("Start Get Observation ==>")
         # We get the laser scan data
         laser_scan = self.get_laser_scan()
+        odom = self.get_odom()
+        xy = [round(odom.pose.pose.position.x, 1), round(odom.pose.pose.position.y, 1)]
 
         discretized_observations = self.discretize_scan_observation(    laser_scan,
                                                                         self.new_ranges
                                                                         )
+        observation = []
+        laser_center = discretized_observations[0]
+        laser_left = discretized_observations[1]
+        laser_right = discretized_observations[2]
 
-        rospy.logdebug("Observations==>"+str(discretized_observations))
+        observation.append(laser_center)
+        observation.append(laser_left)
+        observation.append(laser_right)
+
+        observation.append(xy[0])
+        observation.append(xy[1])
+        print("Laser (0°, 55°, 305°), X, Y: ", observation)
+
+        rospy.logdebug("Observations==>"+str(observation))
         rospy.logdebug("END Get Observation ==>")
-        return discretized_observations
+        return observation
 
 
     def _is_done(self, observations):
@@ -175,34 +195,55 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
         imu_data = self.get_imu()
         linear_acceleration_magnitude = self.get_vector_magnitude(imu_data.linear_acceleration)
         if linear_acceleration_magnitude > self.max_linear_aceleration:
-            rospy.logerr("TurtleBot2 Crashed==>"+str(linear_acceleration_magnitude)+">"+str(self.max_linear_aceleration))
+            rospy.logerr("TurtleBot3 Crashed==>"+str(linear_acceleration_magnitude)+">"+str(self.max_linear_aceleration))
             self._episode_done = True
         else:
             #Check if we reached Finish
             odom_state = self.get_odom()
             if (odom_state.pose.pose.position.x > 1.6 and odom_state.pose.pose.position.y > 1.6):
-                rospy.logerr("TurtleBot2 Reached the End==>"+str(linear_acceleration_magnitude)+">"+str(self.max_linear_aceleration))
+                rospy.logerr("TurtleBot3 Reached the End==>"+str(linear_acceleration_magnitude)+">"+str(self.max_linear_aceleration))
                 self._episode_done = True
             else:
-                rospy.logerr("DIDNT crash TurtleBot2 ==>"+str(linear_acceleration_magnitude)+">"+str(self.max_linear_aceleration))
+                rospy.logerr("DIDNT crash TurtleBot3 ==>"+str(linear_acceleration_magnitude)+">"+str(self.max_linear_aceleration))
 
 
         return self._episode_done
 
     def _compute_reward(self, observations, done):
 
+        def location_reward(current_x, current_y, goal_x, goal_y):
+            reward = ((2 + current_x) + (2 + current_y)) * 10
+            return int(reward)
+        
+        def proximity_reward(laser_front, laser_left, laser_right):
+            if (laser_front < 0.5):
+                return -100
+            elif (laser_left < 0.3 or laser_right < 0.3):
+                return -20
+            else:
+                return 0
+
         if not done:
             if self.last_action == "FORWARDS":
-                reward = self.forwards_reward
+                reward = self.forwards_reward + location_reward(observations[-2], observations[-1], 1.6, 1.6) + proximity_reward(observations[0], observations[1], observations[2])
             else:
-                reward = self.turn_reward
+                reward = location_reward(observations[-2], observations[-1], 1.6, 1.6) + proximity_reward(observations[0], observations[1], observations[2])
         else:
             odom_state = self.get_odom()
             if (odom_state.pose.pose.position.x > 1.6 and odom_state.pose.pose.position.y > 1.6):
-                reward = self.end_episode_points
+                reward = self.end_episode_points + 800
             else:
                 reward = -1*self.end_episode_points
 
+        if not self.checkpoint1:
+            if ( (observations[-2] > 1.4) and (observations[-1] > -1.5) ):
+                reward += 200
+                self.checkpoint1 = True
+                
+        if not self.checkpoint2:
+            if ( (observations[-2] > 1.4) and (observations[-1] > 0.5) ):
+                reward += 500
+                self.checkpoint2 = True
 
         rospy.logdebug("reward=" + str(reward))
         self.cumulated_reward += reward
@@ -230,20 +271,19 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
         rospy.logdebug("mod=" + str(mod))
 
         for i, item in enumerate(data.ranges):
-            if (i%mod==0):
+            if (i==0 or i==55 or i==305):
                 if item == float ('Inf') or numpy.isinf(item):
                     discretized_ranges.append(self.max_laser_value)
                 elif numpy.isnan(item):
                     discretized_ranges.append(self.min_laser_value)
                 else:
-                    discretized_ranges.append(int(item))
+                    discretized_ranges.append(round(item,1))
 
                 if (self.min_range > item > 0):
                     rospy.logerr("done Validation >>> item=" + str(item)+"< "+str(self.min_range))
                     self._episode_done = True
                 else:
                     rospy.logdebug("NOT done Validation >>> item=" + str(item)+"< "+str(self.min_range))
-
 
         return discretized_ranges
 
