@@ -93,6 +93,9 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
         self.end_episode_points = rospy.get_param("/turtlebot3/end_episode_points")
 
         self.cumulated_steps = 0.0
+        
+        self.checkpoint1 = False
+        self.checkpoint2 = False
 
 
     def _set_init_pose(self):
@@ -116,6 +119,8 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
         self.cumulated_reward = 0.0
         # Set to false Done, because its calculated asyncronously
         self._episode_done = False
+        self.checkpoint1 = False
+        self.checkpoint2 = False
 
 
     def _set_action(self, action):
@@ -230,6 +235,15 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
             else:
                 reward = -1*self.end_episode_points
 
+        if not self.checkpoint1:
+            if ( (observation[-2] > 1.4) and (observation[-1] > -1.5):
+                reward += 100
+                self.checkpoint1 = True
+                
+        if not self.checkpoint2:
+            if ( (observation[-2] > 1.4) and (observation[-1] > 0.5):
+                reward += 100
+                self.checkpoint2 = True
 
         rospy.logdebug("reward=" + str(reward))
         self.cumulated_reward += reward
