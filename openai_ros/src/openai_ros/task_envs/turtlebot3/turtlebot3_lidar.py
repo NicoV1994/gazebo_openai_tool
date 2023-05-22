@@ -220,9 +220,9 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
 
         if not done:
             if self.last_action == "FORWARDS":
-                reward = self.forwards_reward + location_reward(observations[-2], observations[-1], 1.6, 1.6) + proximity_reward(observations[0], observations[1], observations[2])
+                reward = self.forwards_reward + location_reward(observations[-2], observations[-1], 1.6, 1.6) + proximity_reward(observations[0], observations[1], observations[4])
             else:
-                reward = location_reward(observations[-2], observations[-1], 1.6, 1.6) + proximity_reward(observations[0], observations[1], observations[2])
+                reward = location_reward(observations[-2], observations[-1], 1.6, 1.6) + proximity_reward(observations[0], observations[1], observations[4])
         else:
             odom_state = self.get_odom()
             if (odom_state.pose.pose.position.x > 1.6 and odom_state.pose.pose.position.y > 1.6):
