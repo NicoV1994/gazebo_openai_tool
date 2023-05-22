@@ -236,12 +236,12 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
                 reward = -1*self.end_episode_points
 
         if not self.checkpoint1:
-            if ( (observation[-2] > 1.4) and (observation[-1] > -1.5):
+            if ( (observation[-2] > 1.4) and (observation[-1] > -1.5) ):
                 reward += 100
                 self.checkpoint1 = True
                 
         if not self.checkpoint2:
-            if ( (observation[-2] > 1.4) and (observation[-1] > 0.5):
+            if ( (observation[-2] > 1.4) and (observation[-1] > 0.5) ):
                 reward += 100
                 self.checkpoint2 = True
 
