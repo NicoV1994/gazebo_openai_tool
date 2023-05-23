@@ -96,6 +96,7 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
         
         self.checkpoint1 = False
         self.checkpoint2 = False
+        self.checkpoint3 = False
 
 
     def _set_init_pose(self):
@@ -121,6 +122,7 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
         self._episode_done = False
         self.checkpoint1 = False
         self.checkpoint2 = False
+        self.checkpoint3 = False
 
 
     def _set_action(self, action):
@@ -237,13 +239,18 @@ class TurtleBot3WorldEnv(turtlebot3_env.TurtleBot3Env):
 
         if not self.checkpoint1:
             if ( (observations[-2] > 1.4) and (observations[-1] > -1.5) ):
-                reward += 200
+                reward += 500
                 self.checkpoint1 = True
                 
         if not self.checkpoint2:
             if ( (observations[-2] > 1.4) and (observations[-1] > 0.5) ):
-                reward += 500
+                reward += 800
                 self.checkpoint2 = True
+
+        if not self.checkpoint3:
+            if ( (observations[-2] > 0) and (observations[-1] > -1.5) ):
+                reward += 300
+                self.checkpoint3 = True
 
         rospy.logdebug("reward=" + str(reward))
         self.cumulated_reward += reward
